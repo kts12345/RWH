@@ -4,28 +4,16 @@ module Ch01Exer01 where
 solution :: IO ()
 solution = do
     print $ 5 + 8
-    pirnt $ 3 * 5 + 8 2
+    print $ 3 * 5 + 8
     print $ 2 + 4
-    print $ (+) 2 4 1
-    print $ sqrt 16 2
-{-
-   succ 6 3 comments
-
-succ 7 1 comment
-
-pred 9 No comments
-
-pred 8 No comments
-
-sin (pi / 2) 15 comments
-
-truncate pi 1 comment
-
-round 3.5 3 comments
-
-round 3.4 No comments
-
-floor 3.7 4 comments
-
-ceiling 3.3 2 comments
-}
+    print $ (+) 2 4
+    print $ sqrt 16
+    print $ succ 6
+    print $ succ 7
+    print $ pred 8
+    print $ sin (pi / 2)
+    print $ truncate pi
+    print $ round 3.5
+    print $ round 3.4
+    print $ floor 3.7
+    print $ ceiling 3.3
