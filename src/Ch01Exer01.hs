@@ -1,6 +1,6 @@
 module Ch01Exer01 where
 
--- | The main entry point.
+-- | The solution's main entry porint
 solution :: IO ()
 solution = do
     print $ 5 + 8
