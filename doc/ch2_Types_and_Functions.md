@@ -61,7 +61,17 @@
   - 타입 시스템의 가치는 점점 모습을 드러낼 것임.
   - 각 부분에서 보여지는 장점들의 합보다 훨씬 큰 장점이 마지막에는 드러남.
 
-##### 몇 가지 기본 타입
+##### 몇 가지 기본 타입 (some common basic types)
+- 가장 흔하게 사용하는 기본 타입들 중 일부 소개.
+  - Char : 유니코드 문자를 표현
+  - Bool : 불리안 로직의 값을 표현. True, False 두 개의 값이 가능
+  - Int :  부호 있는 고정 크기(최소 28비트) 정수 값 표현. 일반적으로 머신 bits 수를 따름.
+  - Integer : 제약 없는 크기의 부호 있는 정수 표현. 오버플로우 문제는 없으나 성능은 Int 에 비해 떨어짐.
+  - Double : 64비트 부동 소수 표현. float 은 Double 보다 느리게 구현되어 있어서 사용이 장려되지 않음.
+- type signature
+  - expression::type 형태에서 '::type' 부분을 뜻함.
+  - 특정 표현식이 갖는 타입을 타입 시그너처를 통해 명시할 수 있으나,
+  - 타입 시그너처를 생략할 수도 있고, 생략하면 컴파일러가 유추함.
 
 ##### 함수 적용 (Function application)
 
@@ -70,7 +80,7 @@
 ##### list와 tuple에 적용 가능한 함수들
 * 함수에 표현식 전달하기
 
-##### 함수 타입과 순수성성 Function types and purity
+##### 함수 타입과 순수성 Function types and purity
 
 ##### 하스켈 소스 파일, 간단한 함수 작성
 * 변수란? (Just what is a variable, anyway?)
