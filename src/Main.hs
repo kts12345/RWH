@@ -9,6 +9,7 @@ import Ch02Exer01_01
 import Ch02Exer02_01
 import Ch02Exer02_02
 import Ch02Exer02_03
+import Ch03Exer01_01
 
 -- | The main entry point.
 main :: IO ()
@@ -20,5 +21,6 @@ main = do
   --    Ch02Exer01_01.solution
   --    Ch02Exer02_01.solution
   --    Ch02Exer02_02.solution
-        Ch02Exer02_03.solution
+  --    Ch02Exer02_03.solution
+        Ch03Exer01_01.solution
         
