@@ -1,6 +1,6 @@
 module Ch01Exer02 where
 
--- | The solution's main entry porint
+-- | The solution's main entry point
 solution :: IO ()
 solution = do
     print $ "Prelude> let x = 1       "

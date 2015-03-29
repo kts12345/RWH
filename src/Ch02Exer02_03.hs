@@ -1,6 +1,6 @@
 module Ch02Exer02_03 where
 
--- | The solution's main entry porint
+-- | The solution's main entry point
 solution :: IO ()
 solution = do
     print $ "Main> lastButOne [1, 2]"

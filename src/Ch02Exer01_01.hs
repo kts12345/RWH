@@ -1,6 +1,6 @@
 module Ch02Exer01_01 where
 
--- | The solution's main entry porint
+-- | The solution's main entry point
 solution :: IO ()
 solution = do
     print $ "False :: Bool"

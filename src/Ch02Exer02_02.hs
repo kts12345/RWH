@@ -4,7 +4,7 @@ lastButOne :: [a] -> a
 lastButOne (a:b:xs)  = (last.init) (a:b:xs)
 lastButOne _         = error "lastButOne. too short input"
 
--- | The solution's main entry porint
+-- | The solution's main entry point
 --solution :: IO ()
 solution = do
    print $ test [1,2,3]

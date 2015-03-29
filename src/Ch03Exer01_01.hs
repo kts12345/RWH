@@ -1,10 +1,4 @@
 module Ch03Exer01_01 where
-            
--- | The solution's main entry porint
-solution :: IO ()
-solution = do
-    print $ toList $ Cons 'd' (Cons 'u' (Cons 'r' (Cons 'i' (Cons 'a' (Cons 'n' Nil)))))
-    print $ toList $ Cons (Just True) (Cons Nothing (Cons (Just False) Nil))
 
 -- | Definition of List from 'Real World Haskell Textbook'
 data List a = Cons a (List a)
@@ -15,3 +9,14 @@ data List a = Cons a (List a)
 toList :: List a -> [a]
 toList (Cons a xs) = a:toList xs
 toList Nil         = []
+--------------------------------------------------------------
+-- | The solution's main entry point
+solution :: IO ()
+solution = do
+    print $ toList $ Cons 'd' (Cons 'u' (Cons 'r' (Cons 'i' (Cons 'a' (Cons 'n' Nil))))) 
+    print $ toList $ Cons (Just True) (Cons Nothing (Cons (Just False) Nil))
+    
+-- | output
+-- "durian"
+-- [Just True,Nothing,Just False] 
+
