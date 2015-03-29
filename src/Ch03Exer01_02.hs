@@ -11,3 +11,6 @@ solution :: IO ()
 solution = do
     print $ Node "parent" (Just (Node "left child"  Nothing Nothing))
                           (Just (Node "right child" Nothing Nothing))
+
+-- | output                     
+-- Node "parent" (Just (Node "left child" Nothing Nothing)) (Just (Node "right child" Nothing Nothing))

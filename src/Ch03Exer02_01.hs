@@ -13,3 +13,11 @@ solution = do
     where
         samples = [[], "1", "12", "123", "1234", "12345"]
         test xs = print $ length xs == length' xs
+
+-- | output
+-- True
+-- True
+-- True
+-- True
+-- True
+-- True
