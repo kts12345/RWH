@@ -14,3 +14,8 @@ solution = do
     mapM_ print samples
     where
         samples = [DirLeft, DirRight, DirStraight]
+
+-- | output
+-- DirLeft
+-- DirRight
+-- DirStraight
