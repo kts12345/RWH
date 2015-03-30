@@ -5,7 +5,7 @@ module Ch03Exer02_09 where
 --     it either turns left, turns right, or forms a straight line. 
 --     Define a Direction data type that lets you represent these possibilities.
 
-data Dir = DirLeft | DirRight | DirStraight
+data Direction = DirLeft | DirRight | DirStraight
          deriving (Show)
 --------------------------------------------------------------
 -- | The solution's main entry point
