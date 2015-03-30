@@ -3,7 +3,7 @@ import Data.List
 
 -- | 6. Create a function that sorts a list of lists based on the length of each sublist. 
 -- (You may want to look at the sortBy function from the Data.List module
--- sortLists :: [[a]] -> [[a]]
+sortLists :: [[a]] -> [[a]]
 sortLists xss = sortBy cmp xss
     where cmp a b = compare (length a) (length b)
 --------------------------------------------------------------
