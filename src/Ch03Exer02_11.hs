@@ -10,7 +10,7 @@ data Direction = DirLeft | DirRight | DirStraight
          deriving (Show)
 
 direction :: (Double,Double)->(Double,Double)->(Double,Double)->Direction
-direction (x1,y1) (x2, y2) (x3,y3) = 
+direction (x1,y1) (x2, y2) (x3,y3) =
     direction' (x2-x1, y2-y1) (x3-x2, y3-y2)
     where
         direction' (x1, y1) (x2, y2)
