@@ -13,11 +13,13 @@ transWords = mainWith myFunction
           case args of
             [input,output] -> interactWith function input output
             _ -> putStrLn "error: exactly two arguments needed"
-        myFunction xs = unlines      $
+        myFunction :: String->String
+        myFunction xs = unlines   $
                         transpose $
+                        normalize $
                         lines xs
-              where safeHead [] = []
-                    safeHead xs = head xs
+              where normalize xss = [take maxLen $ xs ++ (repeat ' ') | xs<-xss] 
+                      where maxLen = maximum $ map length xss
 --------------------------------------------------------------
 -- | The solution's main entry point
 main :: IO ()
