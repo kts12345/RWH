@@ -1,4 +1,4 @@
-### Chapter 13. Data Structures  (13장. 타입과 함수)
+Chapter 13. Data Structures  (13장. 자료구조)
 ========
 
 Association Lists (연관 리스트):
