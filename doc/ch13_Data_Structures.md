@@ -150,8 +150,8 @@ ghci> (colorCalc always0) 7
 
  ```
   * 클로저(Closure) : 위 예시 코드에서 FuncRec 에 컬러값을 저장하는 곳이 없는데 불구하고  
-    맴버 함수는 자주색 컬러 값을 함수 자체에 내장하고 있다가 리턴값 생성에 사용한다.
-    (교제에서는 이미 P5 포멧 파싱하는 10장의 Tip 부분에서 간단히 정의했었음)
+    맴버 함수는 자주색 컬러 값을 함수 자체에 내장하고 있다가 리턴값 생성에 사용한다.  
+    (교제에서는 이미 P5 포멧 파싱하는 10장의 Tip 부분에서 간단하게 Closure 정의 했었음)
 * 좀 더 고급진 예시 : 데이터를 여러 곳에서 사용하는 것을 타입 생성 함수 도움으로 쉽게 하기.
  ```haskell
  data FuncRec = FuncRec {name      :: String,                -- 함수 이름 
@@ -187,4 +187,12 @@ ghci> name plus5a
 ghci> (namedCalc plus5a) 5
 ("plus5",10)  -- "PLUS5A" 로 바뀌지 않은 것 확인.
  ```
+Extended Example: /etc/passwd (확장 예제: /etc/passwd): 
+------
+* 포멧이 잘 알려진 /etc/passwd 파일 읽어서 유저가 원하는 정보 출력하는 코드 작성
+* Map 자료구조 2개를 동시에 제어하는 예시 코드 <sup>[각주1)](#myfootnote1)</sup>
+* 동작 설명 
+  
 
+------
+<a name="myfootnote1">각주1)</a>: Footnote content goes here  
