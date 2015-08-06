@@ -111,6 +111,80 @@ Maps (맵):
 
 
 
-Functions Are Data, Too (함수도 데이터다, 정말로):
+Functions Are Data, Too (함수도 역시 데이터다):
 ------
-....
+* 함수 생성 및 조작이 쉽다는 것은 하스켈의 강력한 장점 중 하나.
+* 코드 예시 : 함수를 (레코드)항목으로 가진 데이터 타입 정의 및 사용
+ ```haskell
+ --일반적인 사용자정의컬러 타입 정의
+ data CustomColor =  CustomColor {red :: Int, green :: Int, blue :: Int}
+                    deriving (Eq, Show, Read)
+
+--   정수값을 입력받아 (컬러값, 정수값)쌍을 리턴하는 함수를 두 번째 맴버로 가지는  타입 정의
+data FuncRec = FuncRec {name :: String, colorCalc :: Int -> (CustomColor, Int)}
+
+-- 컬러값과 정수값을 입력받아 정수값만 5증가한 값으로 변환.
+plus5func color x = (color, x + 5) 
+
+-- 자주색 값.
+purple = CustomColor 255 0 255     
+
+-- plus5 의 colorCalc 맴버 함수는 자주색 컬러값과  입력 인자 정수값을 5증가시킨 값을 리턴.
+plus5 = FuncRec {name = "plus5", colorCalc = plus5func purple}
+
+-- always0 의 colorCalc 맴버 함수는 자주색 컬러값과 정수 0을 리턴.
+always0 = FuncRec {name = "always0", colorCalc = \_ -> (purple, 0)}
+ ===============================
+ghci> :t plus5
+plus5 :: FuncRec
+ghci> name plus5
+"plus5"
+ghci> :t colorCalc plus5
+colorCalc plus5 :: Int -> (CustomColor, Int)
+ghci> (colorCalc plus5) 7
+(CustomColor {red = 255, green = 0, blue = 255},12)
+ghci> :t colorCalc always0
+colorCalc always0 :: Int -> (CustomColor, Int)
+ghci> (colorCalc always0) 7
+(CustomColor {red = 255, green = 0, blue = 255},0)
+
+ ```
+  * 클로저(Closure) : 위 예시 코드에서 FuncRec 에 컬러값을 저장하는 곳이 없는데 불구하고  
+    맴버 함수는 자주색 컬러 값을 함수 자체에 내장하고 있다가 리턴값 생성에 사용한다.
+    (교제에서는 이미 P5 포멧 파싱하는 10장의 Tip 부분에서 간단히 정의했었음)
+* 좀 더 고급진 예시 : 데이터를 여러 곳에서 사용하는 것을 타입 생성 함수 도움으로 쉽게 하기.
+ ```haskell
+ data FuncRec = FuncRec {name      :: String,                -- 함수 이름 
+                         calc      :: Int -> Int,            -- 함수 구현
+                         namedCalc :: Int -> (String, Int)}  -- 함수 이름도 함께 리턴하는 확장 함수
+
+-- 생성 함수 : 핵심 값(함수 포함)만 입력받아 각 (레코드) 필드값을 채워 넣음
+ mkFuncRec :: String -> (Int -> Int) -> FuncRec
+ mkFuncRec name calcfunc = FuncRec {name      = name,
+                                    calc      = calcfunc,
+                                    namedCalc = \x -> (name, calcfunc x)}
+
+ plus5   = mkFuncRec "plus5"   (+ 5)
+ always0 = mkFuncRec "always0" (\_ -> 0)
+ 
+ ===============================
+ghci> :t plus5
+plus5 :: FuncRec
+
+ghci> name plus5
+"plus5"
+
+ghci> (calc plus5) 5
+10
+
+ghci> (namedCalc plus5) 5
+("plus5",10)
+
+ghci> let plus5a = plus5 {name = "PLUS5A"} -- 특정 필드 값만 바꿈. 10장에서 다뤘던 내용. 
+ghci> name plus5a
+"PLUS5A"
+
+ghci> (namedCalc plus5a) 5
+("plus5",10)  -- "PLUS5A" 로 바뀌지 않은 것 확인.
+ ```
+
