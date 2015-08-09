@@ -1,8 +1,10 @@
-Chapter 13. Data Structures  (13장. 자료구조)
-========
 
-Association Lists (연관 리스트):
+## Chapter 13. Data Structures  (13장. 자료구조) ##
+
+
 ------
+### ■ Association Lists (연관 리스트) ###
+
 
 * 무순서(unordered)지만 특정 키로 인덱싱되는 데이터를 다루어야 할 때가 많음.
  * ex) 유닉스 관리 모듈은 숫자로 된 UID를 키 값으로 그에 대응되는 사용자 이름을 얻어냄.
@@ -63,9 +65,9 @@ Association Lists (연관 리스트):
    ```
   
   
-  
-Maps (맵):
-------
+------  
+### ■ Maps (맵) ###
+
 * association lists 보다 성능이 좋음.
 * 다른 언어의 hash table 과 동일 기능 제공
 * 내부적으로는 균형 이진 트리 사용하여 구현됨
@@ -110,9 +112,9 @@ Maps (맵):
   
 
 
-
-Functions Are Data, Too (함수도 역시 데이터다):
 ------
+### ■ Functions Are Data, Too (함수도 역시 데이터다) ###
+
 * 함수 생성 및 조작이 쉽다는 것은 하스켈의 강력한 장점 중 하나.
 * 코드 예시 : 함수를 (레코드)항목으로 가진 데이터 타입 정의 및 사용
  ```haskell
@@ -120,33 +122,34 @@ Functions Are Data, Too (함수도 역시 데이터다):
  data CustomColor =  CustomColor {red :: Int, green :: Int, blue :: Int}
                     deriving (Eq, Show, Read)
 
---   정수값을 입력받아 (컬러값, 정수값)쌍을 리턴하는 함수를 두 번째 맴버로 가지는  타입 정의
-data FuncRec = FuncRec {name :: String, colorCalc :: Int -> (CustomColor, Int)}
+ --   정수값을 입력받아 (컬러값, 정수값)쌍을 리턴하는 함수를 두 번째 맴버로 가지는  타입 정의
+ data FuncRec = FuncRec {name :: String, colorCalc :: Int -> (CustomColor, Int)}
 
--- 컬러값과 정수값을 입력받아 정수값만 5증가한 값으로 변환.
-plus5func color x = (color, x + 5) 
+ -- 컬러값과 정수값을 입력받아 정수값만 5증가한 값으로 변환.
+ plus5func color x = (color, x + 5) 
 
--- 자주색 값.
-purple = CustomColor 255 0 255     
+ -- 자주색 값.
+ purple = CustomColor 255 0 255     
 
--- plus5 의 colorCalc 맴버 함수는 자주색 컬러값과  입력 인자 정수값을 5증가시킨 값을 리턴.
-plus5 = FuncRec {name = "plus5", colorCalc = plus5func purple}
+ -- plus5 의 colorCalc 맴버 함수는 자주색 컬러값과  입력 인자 정수값을 5증가시킨 값을 리턴.
+ plus5 = FuncRec {name = "plus5", colorCalc = plus5func purple}
 
--- always0 의 colorCalc 맴버 함수는 자주색 컬러값과 정수 0을 리턴.
-always0 = FuncRec {name = "always0", colorCalc = \_ -> (purple, 0)}
- ===============================
-ghci> :t plus5
-plus5 :: FuncRec
-ghci> name plus5
-"plus5"
-ghci> :t colorCalc plus5
-colorCalc plus5 :: Int -> (CustomColor, Int)
-ghci> (colorCalc plus5) 7
-(CustomColor {red = 255, green = 0, blue = 255},12)
-ghci> :t colorCalc always0
-colorCalc always0 :: Int -> (CustomColor, Int)
-ghci> (colorCalc always0) 7
-(CustomColor {red = 255, green = 0, blue = 255},0)
+ -- always0 의 colorCalc 맴버 함수는 자주색 컬러값과 정수 0을 리턴.
+ always0 = FuncRec {name = "always0", colorCalc = \_ -> (purple, 0)}
+
+ =================================
+ ghci> :t plus5
+ plus5 :: FuncRec
+ ghci> name plus5
+ "plus5"
+ ghci> :t colorCalc plus5
+ colorCalc plus5 :: Int -> (CustomColor, Int)
+ ghci> (colorCalc plus5) 7
+ (CustomColor {red = 255, green = 0, blue = 255},12)
+ ghci> :t colorCalc always0
+ colorCalc always0 :: Int -> (CustomColor, Int)
+ ghci> (colorCalc always0) 7
+ (CustomColor {red = 255, green = 0, blue = 255},0)
 
  ```
   * 클로저(Closure) : 위 예시 코드에서 FuncRec 에 컬러값을 저장하는 곳이 없는데 불구하고  
@@ -158,7 +161,7 @@ ghci> (colorCalc always0) 7
                          calc      :: Int -> Int,            -- 함수 구현
                          namedCalc :: Int -> (String, Int)}  -- 함수 이름도 함께 리턴하는 확장 함수
 
--- 생성 함수 : 핵심 값(함수 포함)만 입력받아 각 (레코드) 필드값을 채워 넣음
+  -- 생성 함수 : 핵심 값(함수 포함)만 입력받아 각 (레코드) 필드값을 채워 넣음
  mkFuncRec :: String -> (Int -> Int) -> FuncRec
  mkFuncRec name calcfunc = FuncRec {name      = name,
                                     calc      = calcfunc,
@@ -168,31 +171,42 @@ ghci> (colorCalc always0) 7
  always0 = mkFuncRec "always0" (\_ -> 0)
  
  ===============================
-ghci> :t plus5
-plus5 :: FuncRec
+ ghci> :t plus5
+ plus5 :: FuncRec
 
-ghci> name plus5
-"plus5"
+ ghci> name plus5
+ "plus5"
 
-ghci> (calc plus5) 5
-10
+ ghci> (calc plus5) 5
+ 10
 
-ghci> (namedCalc plus5) 5
-("plus5",10)
+ ghci> (namedCalc plus5) 5
+ ("plus5",10)
 
-ghci> let plus5a = plus5 {name = "PLUS5A"} -- 특정 필드 값만 바꿈. 10장에서 다뤘던 내용. 
-ghci> name plus5a
-"PLUS5A"
+ ghci> let plus5a = plus5 {name = "PLUS5A"} -- 특정 필드 값만 바꿈. 10장에서 다뤘던 내용. 
+ ghci> name plus5a
+ "PLUS5A"
 
-ghci> (namedCalc plus5a) 5
-("plus5",10)  -- "PLUS5A" 로 바뀌지 않은 것 확인.
+ ghci> (namedCalc plus5a) 5
+ ("plus5",10)  -- "PLUS5A" 로 바뀌지 않은 것 확인.
  ```
-Extended Example: /etc/passwd (확장 예제: /etc/passwd): 
 ------
+### ■ Extended Example(확장 예제): /etc/passwd  ###
+
 * 포멧이 잘 알려진 /etc/passwd 파일 읽어서 유저가 원하는 정보 출력하는 코드 작성
 * Map 자료구조 2개를 동시에 제어하는 예시 코드 <sup>[각주1)](#myfootnote1)</sup>
-* 동작 설명 
-  
+* 동작 설명  
 
 ------
-<a name="myfootnote1">각주1)</a>: Footnote content goes here  
+### ■ Extended example: Numeric Types ###
+
+------
+#### First Steps ####
+
+
+------
+#### Completed Code ####
+
+
+------
+<a name="myfootnote1">각주1)</a>: 각주 테스트  
