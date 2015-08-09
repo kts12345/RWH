@@ -110,8 +110,6 @@
      개별 함수 상세 설명 보다는  
      이번 13장에서 논의할 개념들과 관련 깊은 예제 중심으로 설명할 예정
   
-
-
 ------
 ### ■ Functions Are Data, Too (함수도 역시 데이터다) ###
 
@@ -190,6 +188,7 @@
  ghci> (namedCalc plus5a) 5
  ("plus5",10)  -- "PLUS5A" 로 바뀌지 않은 것 확인.
  ```
+
 ------
 ### ■ Extended Example(확장 예제): /etc/passwd  ###
 
