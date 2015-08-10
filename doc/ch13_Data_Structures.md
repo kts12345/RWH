@@ -195,13 +195,106 @@
 * 포멧이 잘 알려진 /etc/passwd 파일 읽어서 유저가 원하는 정보 출력하는 코드 작성
 * Map 자료구조 2개를 동시에 제어하는 예시 코드 <sup>[각주1)](#myfootnote1)</sup>
 * 동작 설명  
+  * 커멘드 라인을 통해 파일명을 입력 받는다.  
+  * 파일을 (lazy하게) 읽는다.
+  * 메뉴를 보여주고 사용자가 선택하게 한다.
+  * 사용자가 선택값에 따라 다음과 같이 보여 준다.
+       * "1" -> 사용자 이름으로 찾아서 라인 보여주기
+       * "2" -> UID로 찾아서 라인 보여주기
+       * "3" -> 모든 파일 라인 다 보여주기
+       * "4" -> 종료.  
+* 주요 코드 설명
+ ```haskell
+  -- 라인을 나타내는 데이터. 
+  data PasswdEntry = PasswdEntry {
+           userName :: String, password :: String, uid :: Integer,
+           gid :: Integer,  gecos :: String,  homeDir :: String,
+           shell :: String
+          } deriving (Eq, Ord)
+
+  -- string 표현으로 변환 (serialize)
+  instance Show PasswdEntry where
+    show pe = printf "%s:%s:%d:%d:%s:%s:%s" 
+                (userName pe) (password pe) (uid pe) (gid pe)
+                (gecos pe) (homeDir pe) (shell pe)
+
+  -- string 파싱 (deserialize)
+  instance Read PasswdEntry where
+    readsPrec _ value =
+        case split ':' value of
+             [f1, f2, f3, f4, f5, f6, f7] ->
+                 [(PasswdEntry f1 f2 (read f3) (read f4) f5 f6 f7, [])]
+             x -> error $ "Invalid number of fields in input: " ++ show x
+        where        
+        split :: Eq a => a -> [a] -> [[a]]        
+        split _ [] = [[]]
+        split delim str =
+            let (before, remainder) = span (/= delim) str
+                in
+                before : case remainder of
+                              [] -> []
+                              x -> split delim (tail x)  
+
+  -- 검색을 위한 자료 구조 정의
+  type UserMap = Map.Map String PasswdEntry
+  type UserMap = Map.Map String PasswdEntry
+
+  -- 1. 패스워드 파일 컨텐츠를 입력받아 라인 구분.
+  -- 2. PasswdEntry 리스트로 변환
+  -- 3. 두 개의 Map 생성.
+  inputToMaps :: String -> (UIDMap, UserMap)
+  inputToMaps inp = (uidmap, usermap) where 
+    uidmap  = Map.fromList . map (\pe -> (uid pe, pe)) $ entries
+    usermap = Map.fromList . map (\pe -> (userName pe, pe)) $ entries
+    entries = map read (lines inp)
+
+  -- when(조건) do 블럭 패턴 처리.  
+   Control.Moand.when :: Applicative f => Bool -> f () -> f () 
+   Control.Moand.when (length args /= 1) $ do
+        putStrLn "Syntax: passwdmap filename"
+        exitFailure
+   
+ ``` 
 
 ------
 ### ■ Extended example: Numeric Types ###
+* 수치 타입을 정의하여 하스켈 타입 시스템의 강력함을 보여주겠음
+* 일단 사용예 먼저 살펴보 기로 함. 작성할 num.hs 의 사용 예.
+ ```haskell
+  ghci> :load num.hs
+  ghci> 5 + 1 * 3               =>   8      -- 일반적인 'perform'
+  ghci> prettyShow $ 5 + 1 * 3  => "5+(1*3)"  -- 괄호로 우선순위 나타내 줌.
+  ghci> prettyShow $ 5 * 1 + 3  => "(5*1)+3"  -- 괄호로 우선순위 나타내 줌.
+  ghci> prettyShow $ simplify $ 5 + 1 * 3 => "5+3" -- + 텀 레벨 표현.
+  ghci> rpnShow $ 5 + 1 * 3 => "5 1 3 * +"  -- 스택 표현(Reverse Polish Notation )으로 바꿈.
+  ghci> rpnShow $ simplify $ 5 + 1 * 3 => "5 3 +" -- rpn 과 simplify 의 엮기. 
+  ghci> prettyShow $ 5 + (Symbol "x") * 3 =>"5+(x*3)" -- 심볼 포함한 표현식
+  ghci> 5 / 2 => 2.5 -- 일반적인 'perforom'
+  ghci> (units 5 "m") / (units 2 "s") => 2.5_m/s -- 단위 자동 추론
+  ghci> (units 5 "m") + (units 2 "s") => *** Exception: Mis-matched units in add -- 예외 검출
+  ghci> (units 5 "m") + (units 2 "m") => 7_m -- 동일 단위
+  ghci> (units 5 "m") / 2 => 2.5_m -- 단위와 일반 수치 
+  ghci> 10 * (units 5 "m") / (units 2 "s") => 25.0_m/s --일반 수치와 혼용되어도 단위 자동 추론
+  ghci> sin (units (pi / 2) "rad") =>  1.0_1.0 -- 삼각함수에 라디안 적용
+  ghci> sin (units 90 "deg") => 1.0_1.0 -- 삼각함수에 일반각 적용
+  ghci> (units 50 "m") * sin (units 90 "deg") -- 삼각함수와 단위 혼용 50.0_m
+  ghci> ((units 50 "m") * sin (units 90 "deg")) :: Units (SymbolicManip Double)
+        => 50.0*sin(((2.0*pi)*90.0)/360.0)_m -- 타입 지정
+  ghci> prettyShow $ dropUnits $ (units 50 "m") * sin (units 90 "deg")
+        => "50.0*sin(((2.0*pi)*90.0)/360.0)" -- 
+  ghci> rpnShow $ dropUnits $ (units 50 "m") * sin (units 90 "deg")
+        => "50.0 2.0 pi * 90.0 * 360.0 / sin *" -- 
+  ghci> (units (Symbol "x") "m") * sin (units 90 "deg")
+       => x*sin(((2.0*pi)*90.0)/360.0)_m -- 
+  
+ ```
 
 ------
 #### First Steps ####
-
+* 앞에서 사용한 함수들 만들어 보기
+* 먼저 ***(+):: Num a => a -> a -> a*** 를 우리가 만든 타입에 대해 동작하게 하기
+  * Num 타입클래스의 인스턴스가 될 새로운 타입 정의해야 함
+  * 이 새로운 타입은 심볼 표현을 저장할 수 있어야 함
 
 ------
 #### Completed Code ####
