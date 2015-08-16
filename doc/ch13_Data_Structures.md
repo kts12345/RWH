@@ -299,6 +299,17 @@
 ------
 #### Completed Code ####
 
+#### Completed Code (코드 완성) ####
+
+------
+### ■ Taking advantage of functions as data (함수를 데이터로 간주할 때의 장점)  ###
+
+------
+#### Turning difference lists into a proper library 
+(difference lists를 적절히 라이브리리화) ####
+
+------
+#### Lists, difference lists, and monoids #### 
 
 ------
 <a name="myfootnote1">각주1)</a>: 각주 테스트  
