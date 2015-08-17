@@ -319,7 +319,6 @@
         signum _      = error "signum is unimplemented"
         fromInteger i = Number (fromInteger i)
    ```
-   ```haskell
 ------
 ####  ■ Completed Code (나머지 코드 완성하기)
 ```haskell
