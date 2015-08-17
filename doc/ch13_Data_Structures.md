@@ -398,48 +398,6 @@
 ```
 
 
-#### ■ Lists, difference lists, and monoids 
-* 모노이드 monoid
-  * 만족해야 되는 조건이 매우 적어서  
-    * 수학에서 다루는 대부분 오브젝트는 모노이드.
-    * 프로그래밍에서 다루는 대부분의 오브젝트도 역시 모노이드
-      haskell의 특징 : 모노이드를 개념화 시켜서 명시적으로 다룬다  
-  * 만족해야 되는 조건
-    * 결합 법칙이 성립하는 이항 연산자가 존재해야 함
-      ``` a * (b * c) == (a * b) * c ```
-    * 항등원이 존재해야 함  
-      그 항등원을 e라고 하면 모든 a 에 대해,  
-      ```a * e == a 이고  e * a == a ```
-* 모노이드 타입클래스
-   ```haskell
-  class Monoid a where
-       mempty  :: a            -- the identity
-       mappend :: a -> a -> a  -- associative binary operator
-  ```
-* 모노이드로서의 List 와 DList
-  ```haskell
-   instance Monoid [a] where
-       mempty  = []
-       mappend = (++)
-
-   instance Monoid (DList a) where
-       mempty = empty
-       mappend = append
-  ```
-* Tip : 두 연산자 모두 monoid 특성을 만족하는 경우 처리
-  ```haskell
-   -- 덧셈에 대한 모노이드
-   newtype AInt = A { unA :: Int }  deriving (Show, Eq, Num)
-   instance Monoid AInt where
-       mempty = 0
-       mappend = (+)
-
-   -- 곱셈에 대한 모노이드
-   newtype MInt = M { unM :: Int } deriving (Show, Eq, Num)
-   instance Monoid MInt where
-      mempty = 1
-      mappend = (*)
-  ```
   
 #### ■ General purpose sequences (범용 시퀀스)  
 * Data.Sequence
