@@ -520,7 +520,18 @@ rad2deg x = 360 * x / (2 * pi)
 instance (Show a, Num a) => Show (Units a) where
     show (Units xa ua) = show xa ++ "_" ++ prettyShow (simplify ua)
 ```
-
+* 예제 코드 요약
+  * SymbolicManip 가 여러 타입 클래스의 인스턴스가 되도록 구현했다
+  * 또 다른 타입인 Units 도 구현했다. Units는 number 와  측정 단위를 포함했다.
+  * SymbolicManip 와 Units 을 다양하게 랜더링하는 show-like 함수를 구현했다. 
+* 예제 코드의 의미
+  * 모든 언어는 특별한(spcial) 부분을 가지고 있다.
+  * 하스켈의 "special" 부분은 매우 작다.
+  * 이번 예제를 통해 number와 같은 기초적인 무언가를 스스로 쉽게 만들 수 있었다.
+  * 새로 만든 타입은 first-class type 이고 컴파일러가 컴파일 타입에 이에 대한 해석을 할 수 있다.
+  * 하스켈은 코드 재사용과 호환성을 극한까지 추구한다.
+  * 코드를 제네릭하게 만들어서 서로 다른 타입에 대해 동작하게 하는 것이 쉽다.
+  * 또한 새로운 타입을 만들어서 자동으로 시스템의 first-class 속성을 갖게 하는 것도 아주 쉽다.
 ------
 ### ■ Taking advantage of functions as data (함수를 데이터로 간주할 때의 장점)
 * 두 리스트를 단순 연결하기
