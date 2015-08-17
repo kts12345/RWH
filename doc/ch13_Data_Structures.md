@@ -290,14 +290,14 @@
  ```
 
 ------
-#### First Steps
+####  ■  First Steps
 * 앞에서 사용한 함수들 만들어 보기
 * 먼저 ***(+):: Num a => a -> a -> a*** 를 우리가 만든 타입에 대해 동작하게 하기
   * Num 타입클래스의 인스턴스가 될 새로운 타입 정의해야 함
   * 이 새로운 타입은 심볼 표현을 저장할 수 있어야 함
 
 ------
-#### Completed Code (코드 완성)
+####  ■ Completed Code (코드 완성)
 
 ------
 ### ■ Taking advantage of functions as data (함수를 데이터로 간주할 때의 장점)
@@ -339,10 +339,10 @@
     * 성능 문제를 해결
     * 이런 접근 방법을 difference list 라고 함. https://en.wikipedia.org/wiki/Difference_list  참조
   * ToDo : (++), (.), 부분적용 등을 숨겨서 보기 좋게 하기
-  
-------
-#### Turning difference lists into a proper library (difference lists를 라이브리리화 하기) 
-* 
+ 
+
+#### ■ Turning difference lists into a proper library 
+* difference lists를 라이브리리화 하기
 ```haskell 
  -- 모듈 인터페이스
  module DList (DList, fromList, toList, empty, 
@@ -397,8 +397,8 @@
      fmap = dmap
 ```
 
-------
-#### Lists, difference lists, and monoids 
+
+#### ■ Lists, difference lists, and monoids 
 * 모노이드 monoid
   * 만족해야 되는 조건이 매우 적어서  
     * 수학에서 다루는 대부분 오브젝트는 모노이드.
@@ -440,7 +440,8 @@
       mempty = 1
       mappend = (*)
   ```
-#### General purpose sequences (범용 시퀀스)  
+  
+#### ■ General purpose sequences (범용 시퀀스)  
 * Data.Sequence
   * 동기 (Motivation) : List 와 DLIst 모두 특정 상황에서는 성능이 낮아짐
   * 여러 연산자들의 다양한 사용패턴에서 좋은 성능을 보임.
@@ -485,6 +486,7 @@
   ghci> Foldable.foldl' (+) 0 (Seq.fromList [1,2,3])
   6
 ```
+
 * 시퀀스 대비 리스트 장점
   * 간단하고, 오버헤드가 적어서 대부분 task에 쉽게 사용하기 편리 
   * 시퀀스는 lazy 방식으로 사용하기 쉽지 않음
