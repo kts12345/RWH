@@ -1,9 +1,9 @@
 
-## Chapter 13. Data Structures  (13장. 자료구조) ##
+## Chapter 13. Data Structures  (13장. 자료구조)
 
 
 ------
-### ■ Association Lists (연관 리스트) ###
+### ■ Association Lists (연관 리스트)
 
 
 * 무순서(unordered)지만 특정 키로 인덱싱되는 데이터를 다루어야 할 때가 많음.
@@ -66,7 +66,7 @@
   
   
 ------  
-### ■ Maps (맵) ###
+### ■ Maps (맵)
 
 * association lists 보다 성능이 좋음.
 * 다른 언어의 hash table 과 동일 기능 제공
@@ -111,7 +111,7 @@
      이번 13장에서 논의할 개념들과 관련 깊은 예제 중심으로 설명할 예정
   
 ------
-### ■ Functions Are Data, Too (함수도 역시 데이터다) ###
+### ■ Functions Are Data, Too (함수도 역시 데이터다)
 
 * 함수 생성 및 조작이 쉽다는 것은 하스켈의 강력한 장점 중 하나.
 * 코드 예시 : 함수를 (레코드)항목으로 가진 데이터 타입 정의 및 사용
@@ -190,7 +190,7 @@
  ```
 
 ------
-### ■ Extended Example(확장 예제): /etc/passwd  ###
+### ■ Extended Example(확장 예제): /etc/passwd
 
 * 포멧이 잘 알려진 /etc/passwd 파일 읽어서 유저가 원하는 정보 출력하는 코드 작성
 * Map 자료구조 2개를 동시에 제어하는 예시 코드 <sup>[각주1)](#myfootnote1)</sup>
@@ -257,7 +257,7 @@
  ``` 
 
 ------
-### ■ Extended example: Numeric Types ###
+### ■ Extended example: Numeric Types
 * 수치 타입을 정의하여 하스켈 타입 시스템의 강력함을 보여주겠음
 * 일단 사용예 먼저 살펴보 기로 함. 작성할 num.hs 의 사용 예.
  ```haskell
@@ -290,17 +290,17 @@
  ```
 
 ------
-#### First Steps ####
+#### First Steps
 * 앞에서 사용한 함수들 만들어 보기
 * 먼저 ***(+):: Num a => a -> a -> a*** 를 우리가 만든 타입에 대해 동작하게 하기
   * Num 타입클래스의 인스턴스가 될 새로운 타입 정의해야 함
   * 이 새로운 타입은 심볼 표현을 저장할 수 있어야 함
 
 ------
-#### Completed Code (코드 완성) ####
+#### Completed Code (코드 완성)
 
 ------
-### ■ Taking advantage of functions as data (함수를 데이터로 간주할 때의 장점)  ###
+### ■ Taking advantage of functions as data (함수를 데이터로 간주할 때의 장점)
 * 두 리스트를 단순 연결하기
   * 절차형 언어에서는 수행 비용이 싸고 쉬움
   * 함수형에서는 결과 리스트가 새로 만들어지기 때문에 비용이 비쌈.
@@ -313,15 +313,181 @@
      _      ++ ys = ys
     ```
   * 위 코드에서 알 수 있듯이 수행 시간은 첫 번째 원본 리스트에 비례함
-    
+  * a++b++c++d... 일 경우 수행 시간은 O(n^2)
+  * 결합 우선순위를 바꿔서 ```haskell infixr 5 ++ ``` 위의 사용 패턴일 때 O(n)으로 할 수 있으나 다른 패턴일 때는 여전히 성능이 나쁨.
+* 부분 적용(partial application)기법을 이용한 성능 향상
+  * 섹션 
+  ```haskell
+  ghci> :type ("a" ++)
+  ("a" ++) :: [Char] -> [Char] 
+  ```
+  * 섹션 합성
+  ```haskell
+  ghci> :type ("a" ++) . ("b" ++)
+  ("a" ++) . ("b" ++) :: [Char] -> [Char]
+  ghci> let f = ("a" ++) . ("b" ++)
+  ghci> f []
+  "ab"
+  ```
+  * 섹션 합성은 O(1) 에 수행됨
+  * 합성 시에는 실제 연결이 수행(perform)되는 것이 아니라 delay 됨
+  * [] 적용을 통해 연결된 실제 값을 추출할 때 
+    * *++* 연산자는 왼쪽 우선 순위이지만 합성 연산자 *.* 는 오른쪽 우선순위라 오른 쪽 리스트부터 연결 되기 때문에 O(n^2)이 아닌 O(n) 에 수행 가능.
+  * 결론
+    * 익숙하지 않은 자료구조이긴 했으나
+    * 함수를 데이터로 다룸으로써
+    * 성능 문제를 해결
+    * 이런 접근 방법을 difference list 라고 함. https://en.wikipedia.org/wiki/Difference_list  참조
+  * ToDo : (++), (.), 부분적용 등을 숨겨서 보기 좋게 하기
+  
+------
+#### Turning difference lists into a proper library (difference lists를 라이브리리화 하기) 
+* 
+```haskell 
+ -- 모듈 인터페이스
+ module DList (DList, fromList, toList, empty, 
+                append, cons, dfoldr) where
+ 
+ ----------------------------
+ -- 파라미터화된 타입 DList 정의
+ -- 해체자(unconstructor) unDL
+ newtype DList a = DL { unDL :: [a] -> [a] }
 
+ ----------------------------
+ --리스트 함수 정의
+ 
+ -- 리스트 (++) 에 대응되는 append
+ append :: DList a -> DList a -> DList a
+ append xs ys = DL (unDL xs . unDL ys)
+ -- 또는 append (DL xs) (DL ys) = DL (xs . ys)
+
+ -- 하스켈의 메인 타입인 리스트와의 컨버팅 함수 구현
+ fromList :: [a] -> DList a
+ fromList xs = DL (xs ++)
+
+ toList :: DList a -> [a]
+ toList (DL xs) = xs []
+
+ -- DList value 생성의 seed 값.
+ empty :: DList a
+ empty = DL id
+
+ -- 리스트 (:) 에 대응되는 cons
+ cons :: a -> DList a -> DList a
+ cons x (DL xs) = DL ((x:) . xs)
+ infixr `cons`
+
+ -- 리스트 foldr 에 대응되는 dfoldr
+ dfoldr :: (a -> b -> b) -> b -> DList a -> b
+ dfoldr f z xs = foldr f z (toList xs)
+
+ -- 리스트 head에 대응되는 safeHead. O(n) 수행 시간 소요.
+ safeHead :: DList a -> Maybe a
+ safeHead xs = case toList xs of
+                (y:_) -> Just y
+                 _    -> Nothing
+
+ ---------------------------------
+ -- fmap 구현
+ dmap :: (a -> b) -> DList a -> DList b
+ dmap f = dfoldr go empty
+     where go x xs = cons (f x) xs
+
+ instance Functor DList where
+     fmap = dmap
+```
 
 ------
-#### Turning difference lists into a proper library 
-(difference lists를 적절히 라이브리리화) ####
+#### Lists, difference lists, and monoids 
+* 모노이드 monoid
+  * 만족해야 되는 조건이 매우 적어서  
+    * 수학에서 다루는 대부분 오브젝트는 모노이드.
+    * 프로그래밍에서 다루는 대부분의 오브젝트도 역시 모노이드
+      haskell의 특징 : 모노이드를 개념화 시켜서 명시적으로 다룬다  
+  * 만족해야 되는 조건
+    * 결합 법칙이 성립하는 이항 연산자가 존재해야 함
+      ``` a * (b * c) == (a * b) * c ```
+    * 항등원이 존재해야 함  
+      그 항등원을 e라고 하면 모든 a 에 대해,  
+      ```a * e == a 이고  e * a == a ```
+* 모노이드 타입클래스
+   ```haskell
+  class Monoid a where
+       mempty  :: a            -- the identity
+       mappend :: a -> a -> a  -- associative binary operator
+  ```
+* 모노이드로서의 List 와 DList
+  ```haskell
+   instance Monoid [a] where
+       mempty  = []
+       mappend = (++)
 
-------
-#### Lists, difference lists, and monoids #### 
+   instance Monoid (DList a) where
+       mempty = empty
+       mappend = append
+  ```
+* Tip : 두 연산자 모두 monoid 특성을 만족하는 경우 처리
+  ```haskell
+   -- 덧셈에 대한 모노이드
+   newtype AInt = A { unA :: Int }  deriving (Show, Eq, Num)
+   instance Monoid AInt where
+       mempty = 0
+       mappend = (+)
 
+   -- 곱셈에 대한 모노이드
+   newtype MInt = M { unM :: Int } deriving (Show, Eq, Num)
+   instance Monoid MInt where
+      mempty = 1
+      mappend = (*)
+  ```
+#### General purpose sequences (범용 시퀀스)  
+* Data.Sequence
+  * 동기 (Motivation) : List 와 DLIst 모두 특정 상황에서는 성능이 낮아짐
+  * 여러 연산자들의 다양한 사용패턴에서 좋은 성능을 보임.
+* 사용 방식
+```haskell
+ -- import qualified Data.Sequence as Seq
+ -- import Data.Sequence ((><), (<|), (|>))
+ -- import qualified Data.Foldable as Foldable
+
+ -- 생성 예제 
+  ghci> Seq.empty
+  fromList []
+
+  ghci> Seq.singleton 1
+  fromList [1]
+
+  ghci> let a = Seq.fromList [1,2,3]
+ 
+ -- 삽입 예제 : 오른쪽 시퀀스에 왼쪽 원소 추가
+  ghci> 1 <| Seq.singleton 2 
+  fromList [1,2]
+  ghci> :t (<|)
+  (Data.Sequence.<|) :: a -> Seq a -> Seq a
+
+ -- 삽입 예제 : 왼쪽 시퀀스에 오른쪽 원소 2 추가.
+  Seq.singleton 1 |> 2
+  fromList [1,2]
+  ghci> :t (|>)
+  (Data.Sequence.|>) :: Seq a -> a -> Seq a
+
+ -- 연결 예제
+  ghci> let left = Seq.fromList [1,3,3]
+  ghci> let right = Seq.fromList [7,1]
+  ghci> left >< right
+  fromList [1,3,3,7,1]
+   
+ --리스트로 변환 예제
+  ghci> Foldable.toList (Seq.fromList [1,2,3])
+  [1,2,3]
+
+ -- reduce 예제
+  ghci> Foldable.foldl' (+) 0 (Seq.fromList [1,2,3])
+  6
+```
+* 시퀀스 대비 리스트 장점
+  * 간단하고, 오버헤드가 적어서 대부분 task에 쉽게 사용하기 편리 
+  * 시퀀스는 lazy 방식으로 사용하기 쉽지 않음
+ 
 ------
 <a name="myfootnote1">각주1)</a>: 각주 테스트  
