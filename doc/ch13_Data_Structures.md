@@ -295,7 +295,28 @@
 * 먼저 ***(+):: Num a => a -> a -> a*** 를 우리가 만든 타입에 대해 동작하게 하기
   * Num 타입클래스의 인스턴스가 될 새로운 타입 정의해야 함
   * 이 새로운 타입은 심볼 표현을 저장할 수 있어야 함
+  * 연산자도 저장하고, 각 연산자의 피연산자들도 저장해야 함
+    그래서 tree 스러운 자료구조이어야 함
+   ```haskell
+    -- The "operators" that we're going to support
+    data Op = Plus | Minus | Mul | Div | Pow  deriving (Eq, Show)
+    {- 심볼 처리를 위한 핵심타입 -}
+    data SymbolicManip a = 
+          Number a           -- 5와 같은 단순한 숫자.
+        | Arith Op (SymbolicManip a) (SymbolicManip a) -- 재귀 정의
+          deriving (Eq, Show)
 
+     {- SymbolicManip 은 Num 의 인스턴스.
+        Num 에 대한 연산자가 SymbolicManip 에 대해 어떻게 동작해야 하는지 정의 -}
+    instance Num a => Num (SymbolicManip a) where
+        a + b = Arith Plus a b
+        a - b = Arith Minus a b
+        a * b = Arith Mul a b
+        negate a      = Arith Mul (Number (-1)) a
+        abs a         = error "abs is unimplemented"
+        signum _      = error "signum is unimplemented"
+        fromInteger i = Number (fromInteger i)
+   ```
 ------
 ####  ■ Completed Code (코드 완성)
 
