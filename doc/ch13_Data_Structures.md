@@ -275,7 +275,7 @@
   ghci> (units 5 "m") + (units 2 "m") => 7_m -- 동일 단위
   ghci> (units 5 "m") / 2 => 2.5_m -- 단위와 일반 수치 
   ghci> 10 * (units 5 "m") / (units 2 "s") => 25.0_m/s --일반 수치와 혼용되어도 단위 자동 추론
-  ghci> sin (units (pi / 2) "rad") =>  1.0_1.0 -- 삼각함수에 라디안 적용
+  ghci> sin (units (pi / 2) "rad") =>  1.0_1.0 -- 삼각함수에 라디안 적용. 뒤의  _1.0
   ghci> sin (units 90 "deg") => 1.0_1.0 -- 삼각함수에 일반각 적용
   ghci> (units 50 "m") * sin (units 90 "deg") -- 삼각함수와 단위 혼용 50.0_m
   ghci> ((units 50 "m") * sin (units 90 "deg")) :: Units (SymbolicManip Double)
@@ -477,7 +477,7 @@
     ghci> :t (|>)
     (Data.Sequence.|>) :: Seq a -> a -> Seq a
 
-   -- 연결 예제
+   -- 연결 예제. O(log(m)), where m = min (left,right)
     ghci> let left = Seq.fromList [1,3,3]
     ghci> let right = Seq.fromList [7,1]
     ghci> left >< right
