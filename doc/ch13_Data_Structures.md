@@ -320,7 +320,15 @@
         fromInteger i = Number (fromInteger i)
    ```
 ------
-####  ■ Completed Code (코드 완성)
+####  ■ Completed Code (나머지 코드 완성하기)
+```haskell
+data SymbolicManip a = 
+          Number a           -- 5와 같은 단순한 숫자.
+        | Symbol String      -- x 와 같은 기호
+        | BinaryArith Op (SymbolicManip a) (SymbolicManip a) -- 이항 연산자
+        | UnaryArith String (SymbolicManip a) -- 단항 연산자 ex) cos
+          deriving (Eq)
+```
 
 ------
 ### ■ Taking advantage of functions as data (함수를 데이터로 간주할 때의 장점)
