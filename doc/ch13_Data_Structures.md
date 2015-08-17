@@ -299,15 +299,17 @@
     그래서 tree 스러운 자료구조이어야 함
    ```haskell
     -- The "operators" that we're going to support
-    data Op = Plus | Minus | Mul | Div | Pow  deriving (Eq, Show)
+    data Op = Plus | Minus | Mul | Div | Pow  deriving (Eq, Show) -- 지원해야 하는 Op 타입 정의. 
     {- 심볼 처리를 위한 핵심타입 -}
     data SymbolicManip a = 
           Number a           -- 5와 같은 단순한 숫자.
-        | Arith Op (SymbolicManip a) (SymbolicManip a) -- 재귀 정의
+        | Arith Op (SymbolicManip a) (SymbolicManip a) -- 수치 연산. 재귀적으로 정의.
           deriving (Eq, Show)
 
      {- SymbolicManip 은 Num 의 인스턴스.
-        Num 에 대한 연산자가 SymbolicManip 에 대해 어떻게 동작해야 하는지 정의 -}
+        Num 에 대한 연산자가 SymbolicManip 에 대해 어떻게 동작해야 하는지 정의 
+        이제 SymbolicManip 은  first-class number 이다.
+        즉, 5 는 Int 인 것과 똑 같이 SymbolicManip Int 이기도 하다 -}
     instance Num a => Num (SymbolicManip a) where
         a + b = Arith Plus a b
         a - b = Arith Minus a b
