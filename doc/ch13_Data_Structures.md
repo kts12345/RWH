@@ -532,6 +532,7 @@ instance (Show a, Num a) => Show (Units a) where
   * 하스켈은 코드 재사용과 호환성을 극한까지 추구한다.
   * 코드를 제네릭하게 만들어서 서로 다른 타입에 대해 동작하게 하는 것이 쉽다.
   * 또한 새로운 타입을 만들어서 자동으로 시스템의 first-class 속성을 갖게 하는 것도 아주 쉽다.
+  
 ------
 ### ■ Taking advantage of functions as data (함수를 데이터로 간주할 때의 장점)
 * 두 리스트를 단순 연결하기
