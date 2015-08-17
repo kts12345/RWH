@@ -317,18 +317,18 @@
   * 결합 우선순위를 바꿔서 ```haskell infixr 5 ++ ``` 위의 사용 패턴일 때 O(n)으로 할 수 있으나 다른 패턴일 때는 여전히 성능이 나쁨.
 * 부분 적용(partial application)기법을 이용한 성능 향상
   * 섹션 
-  ```haskell
-  ghci> :type ("a" ++)
-  ("a" ++) :: [Char] -> [Char] 
-  ```
+   ```haskell
+    ghci> :type ("a" ++)
+    ("a" ++) :: [Char] -> [Char] 
+   ```
   * 섹션 합성
-  ```haskell
-  ghci> :type ("a" ++) . ("b" ++)
-  ("a" ++) . ("b" ++) :: [Char] -> [Char]
-  ghci> let f = ("a" ++) . ("b" ++)
-  ghci> f []
-  "ab"
-  ```
+   ```haskell
+    ghci> :type ("a" ++) . ("b" ++)
+    ("a" ++) . ("b" ++) :: [Char] -> [Char]
+    ghci> let f = ("a" ++) . ("b" ++)
+    ghci> f []
+    "ab"
+   ```
   * 섹션 합성은 O(1) 에 수행됨
   * 합성 시에는 실제 연결이 수행(perform)되는 것이 아니라 delay 됨
   * [] 적용을 통해 연결된 실제 값을 추출할 때 
@@ -422,7 +422,7 @@
        mappend = (++)
 
    instance Monoid (DList a) where
-       mempty = empty
+       mempty  = empty
        mappend = append
  ```
 * Tip : 두 연산자 모두 monoid 특성을 만족하는 경우 처리
