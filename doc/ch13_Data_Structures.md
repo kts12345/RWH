@@ -341,7 +341,7 @@
   * ToDo : (++), (.), 부분적용 등을 숨겨서 보기 좋게 하기
  
 
-#### ■ Turning difference lists into a proper library difference lists를 라이브리리화 하기 ####
+#### ■ Turning difference lists into a proper library(difference lists를 라이브리리화 하기)
 ```haskell 
  -- 모듈 인터페이스
  module DList (DList, fromList, toList, empty, 
