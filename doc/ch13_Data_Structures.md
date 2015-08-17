@@ -409,11 +409,11 @@
       그 항등원을 e라고 하면 모든 a 에 대해,  
       ```a * e == a 이고  e * a == a ```
 * 모노이드 타입클래스
-```haskell
+ ```haskell
   class Monoid a where
        mempty  :: a            -- the identity
        mappend :: a -> a -> a  -- associative binary operator
-```
+ ```
 
 * 모노이드로서의 List 와 DList
  ```haskell
