@@ -291,7 +291,7 @@ Supply 모나드에서 두 개의 값을 꺼내어 string 포멧으로 변환해
         b <- next
         return (show "a: " ++ show a ++ ", b: " ++ show b)
 ```
-위 코드는 Supply 모나드에 결과 타입이 종속되는 문제가 있음.
+위 코드는 Supply 모나드 결과 타입이 String으로 한정되는 문제가 있음.
 
 아래와 같이 MonadSupply 인터페이스를 구현한 모든 모나드에 동작하도록   
 (함수 구현을 바꾸지 않고 타입만 바꿔서 쉽게) 제네릭화 가능.
